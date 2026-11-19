@@ -79,9 +79,9 @@
   .stage::before,.stage::after{content:"";position:absolute;top:0;bottom:0;width:50%}
   .stage::before{left:0;background:linear-gradient(180deg,#142034 0%,#243653 30%,#34445F 55%,#3b4458 80%,#4a5163 100%)}
   .stage::after{right:0;background:linear-gradient(180deg,#4a8062 0%,#437b5c 40%,#427a5b 65%,#4d8460 100%)}
-  .stage img{position:relative;z-index:1;height:100%;width:auto;aspect-ratio:1086/1448;max-width:100%;object-fit:cover;
-    -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 140px,#000 calc(100% - 140px),transparent 100%);
-            mask-image:linear-gradient(90deg,transparent 0,#000 140px,#000 calc(100% - 140px),transparent 100%)}
+  .stage img{position:relative;z-index:1;height:100%;width:auto;aspect-ratio:2172/1448;max-width:100%;object-fit:cover;object-position:center;
+    -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 14%,#000 86%,transparent 100%);
+            mask-image:linear-gradient(90deg,transparent 0,#000 14%,#000 86%,transparent 100%)}
   .sides{position:absolute;inset:0;z-index:2;display:grid;grid-template-columns:1fr calc(var(--ph)*.75) 1fr;grid-template-rows:auto auto auto auto auto 1fr;pointer-events:none}
   .side{pointer-events:auto;display:grid;grid-row:1 / -1;grid-template-rows:subgrid;row-gap:14px;align-content:start;padding:44px clamp(20px,3vw,44px) 28px;color:#fff;text-decoration:none;min-width:0;cursor:pointer;position:relative}
   .side.l{grid-column:1;justify-items:start}
@@ -213,7 +213,7 @@
   @media (max-width:1079px){
     .hero2{--ph:auto}
     .stage{height:auto}
-    .stage img{width:min(100%,520px);height:auto}
+    .stage img{width:min(100%,520px);height:auto;aspect-ratio:1086/1448;-webkit-mask-image:none;mask-image:none}
     .sides{position:static;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:none;gap:12px;padding:14px max(16px,env(safe-area-inset-left,0px)) 22px;background:var(--paper);pointer-events:auto}
     .side.l,.side.r{grid-column:auto;grid-row:auto;display:flex;flex-direction:column;gap:14px;align-items:flex-start;text-align:left;border-radius:18px;padding:22px 20px 16px;min-height:0}
     .side.l{background:linear-gradient(170deg,#142034,#34445F)}
