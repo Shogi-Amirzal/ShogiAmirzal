@@ -103,6 +103,7 @@
   .logos .sep{width:1px;align-self:stretch;background:#E3E1DA}
   .scene{align-self:end;width:100%;max-width:360px;color:#fff;opacity:.95}
   .scene svg{display:block;width:100%;height:auto}
+  .ovl{display:none}
 
   .idband{text-align:center;padding-block:34px 4px}
   .idband h1{margin:0;font-size:clamp(30px,5vw,50px)}
@@ -220,6 +221,26 @@
     .side.r{background:linear-gradient(170deg,#123f2a,#1a5c3b)}
     .side.r .chipbox{align-items:flex-start}
     .scene{max-width:300px}
+    .stage{position:relative}
+    .ovl{display:flex;position:absolute;left:50%;transform:translateX(-50%);bottom:0;z-index:2;width:100%;max-width:560px;justify-content:space-between;align-items:flex-end;gap:10px;padding:56px max(16px,env(safe-area-inset-left,0px)) 16px;background:linear-gradient(180deg,transparent,rgba(8,14,22,.72));color:#fff;pointer-events:none;box-sizing:border-box}
+    .ovl span{display:flex;flex-direction:column;gap:3px;font-weight:800;font-size:15px;line-height:1.2;max-width:48%;text-shadow:0 1px 8px rgba(0,0,0,.45)}
+    .ovl span.r{text-align:right;align-items:flex-end}
+    .ovl small{font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;opacity:.85}
+  }
+  @media (max-width:640px){
+    .sides{grid-template-columns:1fr 1fr!important;gap:10px;padding-top:12px}
+    .side.l,.side.r{padding:16px 13px 14px;gap:10px;border-radius:16px}
+    .side .tag,.side h2,.side .sub,.side .scene{display:none}
+    .chipbox small{font-size:9.5px;letter-spacing:.12em;line-height:1.3}
+    .chipbox{margin-top:0;width:100%;gap:8px}
+    .side.r .chipbox{align-items:stretch}
+    .logos{min-height:58px;gap:6px;padding:8px;border-radius:11px;justify-content:center;width:100%}
+    .markcol{gap:4px}
+    .markcol span{font-size:7.5px;letter-spacing:.02em}
+    .markcol img{height:20px}
+    .markcol:nth-child(5) img{height:24px;margin-top:-2px}
+    .logos .pad{height:30px}
+    .side .go{font-size:12.5px;margin-top:auto}
   }
   @media (max-width:640px){
     .sides{grid-template-columns:1fr}
@@ -334,7 +355,7 @@ const SKILLS = ['IT Project Management','Change Management','Business Process','
 function renderHome(){
   return `
   <section class="hero2">
-    <div class="stage"><img src="${IMG.photo}" alt="Shogi Amirzal in batik at the office and in a Padelito Academy jersey on a padel court"></div>
+    <div class="stage"><img src="${IMG.photo}" alt="Shogi Amirzal in batik at the office and in a Padelito Academy jersey on a padel court"><div class="ovl" aria-hidden="true"><span class="l"><small>Career</small>IT &amp; Digital Consultant</span><span class="r"><small>On court</small>Head Padel Coach</span></div></div>
     <div class="sides">
       <a class="side l" href="#consultant" onclick="event.preventDefault();go('consultant')">
         <span class="tag">Career</span>
