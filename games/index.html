@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Games · Shogi Amirzal</title>
-<meta name="description" content="Small games by Shogi Amirzal, playable in the browser.">
+<meta name="description" content="Small games by Shogi Amirzal to play together with friends or family, right in the browser.">
 <link rel="canonical" href="https://www.shogiamirzal.com/games/">
 <link rel="icon" href="/favicon.png" type="image/png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -30,19 +30,84 @@
   .game span{color:var(--ink-soft);font-size:14.5px}
   .game i{font-style:normal;font-size:12.5px;font-weight:600;color:var(--red);margin-top:4px}
   .soon{opacity:.55;pointer-events:none}
+  .game.feat{grid-column:1/-1;padding:0;overflow:hidden;gap:0}
+  .poster{aspect-ratio:640/300;max-width:100%;background:#9ED8FF;border-bottom:1px solid var(--line)}
+  .poster svg{display:block;width:100%;height:100%}
+  .gbody{display:flex;flex-direction:column;gap:6px;padding:16px 18px 18px}
+  .gbody b{font-size:22px}
+  .gbody .note{font-size:13.5px}
+  .gbody em{font-style:italic}
+  .wheel{animation:spin 6s cubic-bezier(.2,.8,.2,1) infinite}
+  @keyframes spin{0%{transform:rotate(0)}45%,100%{transform:rotate(1080deg)}}
+  .dash{animation:dash 1.2s linear infinite}
+  @keyframes dash{to{stroke-dashoffset:-22}}
+  .cloud{animation:drift 26s linear infinite}
+  .c2{animation-duration:34s}
+  @keyframes drift{from{transform:translateX(-140px)}to{transform:translateX(700px)}}
+  .ms{animation:bob 3s ease-in-out infinite}
+  .m2{animation-delay:.4s}.m3{animation-delay:.8s}.m4{animation-delay:1.2s}.m5{animation-delay:1.6s}
+  @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+  @media (prefers-reduced-motion: reduce){.wheel,.dash,.cloud,.ms{animation:none}}
 </style>
 </head>
 <body>
 <div class="wrap">
   <a class="back" href="/">‹ Shogi Amirzal</a>
   <h1>Games</h1>
-  <p class="sub">Small games I build for fun, mostly to play with family. They run in the browser on a phone, tablet or laptop.</p>
+  <p class="sub">Small games I build for fun, made to be played together with friends or family. They run in the browser on a phone, tablet or laptop.</p>
   <div class="grid">
-    <a class="game" href="/games/life/">
-      <span class="ic">🎡</span>
-      <b>LIFE! Simulation</b>
-      <span>A board game of an Indonesian life, from primary school to retirement. 2–6 players on one device.</span>
-      <i>Play ›</i>
+    <a class="game feat" href="/games/life/">
+      <div class="poster" aria-hidden="true">
+        <svg viewBox="0 0 640 300" preserveAspectRatio="xMidYMid slice">
+          <defs>
+            <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9ED8FF"/><stop offset="1" stop-color="#DDF1FF"/></linearGradient>
+            <path id="road" d="M-20 262 C 90 262, 120 196, 210 196 S 330 250, 410 214 S 520 128, 660 140"/>
+          </defs>
+          <rect width="640" height="300" fill="url(#sky)"/>
+          <g class="cloud c1" fill="#fff" opacity=".9"><ellipse cx="80" cy="58" rx="34" ry="14"/><ellipse cx="104" cy="50" rx="24" ry="14"/></g>
+          <g class="cloud c2" fill="#fff" opacity=".8"><ellipse cx="300" cy="40" rx="30" ry="12"/><ellipse cx="320" cy="33" rx="20" ry="12"/></g>
+          <circle cx="560" cy="64" r="26" fill="#FFD966"/>
+          <path d="M0 210 Q 120 150 240 200 T 480 170 T 640 150 V300 H0Z" fill="#8ACF66"/>
+          <path d="M0 240 Q 160 200 320 236 T 640 210 V300 H0Z" fill="#79C257"/>
+          <use href="#road" fill="none" stroke="#fff" stroke-width="34" stroke-linecap="round"/>
+          <use href="#road" fill="none" stroke="#F39C25" stroke-width="28" stroke-linecap="round"/>
+          <use href="#road" fill="none" stroke="#fff" stroke-width="2.5" stroke-dasharray="10 12" class="dash"/>
+          <g font-size="26" text-anchor="middle">
+            <g class="ms m1"><circle cx="150" cy="168" r="20" fill="#fff"/><text x="150" y="177">🎒</text></g>
+            <g class="ms m2"><circle cx="262" cy="168" r="20" fill="#fff"/><text x="262" y="177">🎓</text></g>
+            <g class="ms m3"><circle cx="372" cy="194" r="20" fill="#fff"/><text x="372" y="203">💍</text></g>
+            <g class="ms m4"><circle cx="470" cy="152" r="20" fill="#fff"/><text x="470" y="161">🏠</text></g>
+            <g class="ms m5"><circle cx="590" cy="112" r="20" fill="#fff"/><text x="590" y="121">🌅</text></g>
+          </g>
+          <g class="car"><text font-size="30" text-anchor="middle" y="10" transform="scale(-1 1)">🚗</text>
+            <animateMotion dur="9s" repeatCount="indefinite" rotate="0" keyPoints="0;1" keyTimes="0;1" calcMode="linear"><mpath href="#road"/></animateMotion></g>
+          <g transform="translate(78 118)">
+            <g class="wheel">
+              <circle r="52" fill="#D7263D" stroke="#fff" stroke-width="5"/>
+              <g stroke="#fff" stroke-width="3">
+                <line x1="0" y1="-50" x2="0" y2="50"/><line x1="-50" y1="0" x2="50" y2="0"/>
+                <line x1="-35" y1="-35" x2="35" y2="35"/><line x1="35" y1="-35" x2="-35" y2="35"/>
+              </g>
+              <g fill="#fff" font-size="11" font-weight="700" text-anchor="middle" font-family="Inter,sans-serif">
+                <text y="-34">1</text><text x="34" y="4">3</text><text y="42">5</text><text x="-34" y="4">8</text>
+                <text x="24" y="-21">2</text><text x="24" y="30">4</text><text x="-24" y="30">6</text><text x="-24" y="-21">10</text>
+              </g>
+              <circle r="9" fill="#fff"/>
+            </g>
+            <path d="M0 -62 L-8 -48 H8Z" fill="#15181B"/>
+          </g>
+          <g font-family="Space Grotesk, Inter, sans-serif" text-anchor="end">
+            <text x="616" y="252" font-size="40" font-weight="700" fill="#15181B" class="ttl">LIFE!</text>
+            <text x="616" y="276" font-size="15" font-weight="600" fill="#15181B" opacity=".75">Simulation</text>
+          </g>
+        </svg>
+      </div>
+      <div class="gbody">
+        <b>LIFE! Simulation</b>
+        <span>A board game of an Indonesian life: spin the wheel and ride from primary school to university, work, marriage, a home and retirement. The happiest, most balanced life wins, not just the richest. 2–6 players take turns on one device, and the computer can join in.</span>
+        <span class="note">Inspired by <em>The Game of Life</em> on the PlayStation 1, which I loved playing as a kid.</span>
+        <i>Play now ›</i>
+      </div>
     </a>
   </div>
 </div>
