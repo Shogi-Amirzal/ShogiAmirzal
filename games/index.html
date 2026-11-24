@@ -47,7 +47,9 @@
   .ms{animation:bob 3s ease-in-out infinite}
   .m2{animation-delay:.4s}.m3{animation-delay:.8s}.m4{animation-delay:1.2s}.m5{animation-delay:1.6s}
   @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
-  @media (prefers-reduced-motion: reduce){.wheel,.dash,.cloud,.ms{animation:none}}
+  .arr path{animation:dash 1.4s linear infinite}
+  .fl{animation:bob 3s ease-in-out infinite}.f2{animation-delay:.5s}.f3{animation-delay:1s}.f4{animation-delay:1.5s}
+  @media (prefers-reduced-motion: reduce){.wheel,.dash,.cloud,.ms,.arr path,.fl{animation:none}}
 </style>
 </head>
 <body>
@@ -106,6 +108,36 @@
         <b>LIFE! Simulation</b>
         <span>A board game of an Indonesian life: spin the wheel and ride from primary school to university, work, marriage, a home and retirement. The happiest, most balanced life wins, not just the richest. 2–6 players take turns on one device, and the computer can join in.</span>
         <span class="note">Inspired by <em>The Game of Life</em> on the PlayStation 1, which I loved playing as a kid.</span>
+        <i>Play now ›</i>
+      </div>
+    </a>
+    <a class="game feat" href="/games/conquer/">
+      <div class="poster cq" aria-hidden="true">
+        <svg viewBox="0 0 640 300" preserveAspectRatio="xMidYMid slice">
+          <rect width="640" height="300" fill="#98B6C6"/>
+          <g stroke="#1c2830" stroke-opacity=".35" stroke-width="1.5" stroke-linejoin="round">
+            <path d="M40 70 L130 40 L210 60 L240 120 L190 170 L110 160 L60 130Z" fill="#E7B25E"/>
+            <path d="M210 60 L300 50 L330 110 L280 150 L240 120Z" fill="#C9834E"/>
+            <path d="M300 50 L400 30 L460 80 L430 140 L330 110Z" fill="#8FA9C9"/>
+            <path d="M240 120 L280 150 L330 110 L430 140 L410 200 L320 220 L250 200 L190 170Z" fill="#D4CBB4"/>
+            <path d="M460 80 L560 70 L610 130 L560 180 L470 170 L430 140Z" fill="#B78BC4"/>
+            <path d="M410 200 L470 170 L560 180 L540 240 L450 260Z" fill="#7FAE6E"/>
+            <path d="M110 160 L190 170 L250 200 L220 260 L130 250 L90 200Z" fill="#D9C35E"/>
+          </g>
+          <g class="arr" fill="none" stroke="#B8322B" stroke-width="4" stroke-linecap="round" stroke-dasharray="8 7">
+            <path d="M175 115 Q 240 70 330 95"/><path d="M520 130 Q 480 190 500 220"/>
+          </g>
+          <g font-size="22" text-anchor="middle">
+            <text x="150" y="112" class="fl">🏰</text><text x="370" y="92" class="fl f2">⚔️</text><text x="520" y="132" class="fl f3">🏰</text><text x="170" y="215" class="fl f4">🌾</text><text x="330" y="182" class="fl f2">🛡️</text>
+          </g>
+          <g font-family="Cinzel, Georgia, serif" text-anchor="end">
+            <text x="616" y="276" font-size="40" font-weight="800" fill="#1c2830" letter-spacing="2">CONQUER!</text>
+          </g>
+        </svg>
+      </div>
+      <div class="gbody">
+        <b>CONQUER!</b>
+        <span>Grow a tribe of ten people into a civilization, then conquer the world. Pick your tribe and leader, manage food, gold and armies, make allies or go to war against bots. There is also a turn-based Three Kingdoms board-game mode.</span>
         <i>Play now ›</i>
       </div>
     </a>
