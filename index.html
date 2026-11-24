@@ -69,7 +69,7 @@
   nav.top .wrap{display:flex;align-items:center;justify-content:space-between;padding-block:14px}
   .brand{white-space:nowrap;font-family:var(--font-display);font-weight:700;font-size:17px;text-decoration:none;cursor:pointer}
   .navlinks{display:flex;gap:6px}
-  .navlinks button{font:inherit;background:none;border:none;color:var(--ink-soft);font-size:13.5px;font-weight:600;padding:8px 12px;border-radius:999px;cursor:pointer}
+  .navlinks button,.navlinks .navgame{text-decoration:none;font:inherit;background:none;border:none;color:var(--ink-soft);font-size:13.5px;font-weight:600;padding:8px 12px;border-radius:999px;cursor:pointer}
   .navlinks button.active{color:var(--ink);background:var(--line)}
 
   /* ---------- HOME ---------- */
@@ -256,7 +256,12 @@
     .flow5 div{border-left:none;border-top:1px solid var(--line)}
     .flow5 div:first-child{border-top:none}
     .pagehero .motif{display:none}
-    .navlinks button{padding:8px 9px}
+    .navlinks button,.navlinks .navgame{padding:8px 9px}
+  }
+  @media (max-width:440px){
+    .navlinks{gap:0}
+    .navlinks button,.navlinks .navgame{padding:7px 7px;font-size:12.5px}
+    .brand{font-size:15px}
     .stat{padding:14px 6px}
     .trow{grid-template-columns:1fr;gap:4px}
   }
@@ -272,6 +277,7 @@
       <button data-r="home" onclick="go('home')">Home</button>
       <button data-r="consultant" onclick="go('consultant')">Consultant</button>
       <button data-r="coach" onclick="go('coach')">Coach</button>
+      <a class="navgame" href="/games/">Games</a>
     </div>
   </div>
 </nav>

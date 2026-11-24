@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Games · Shogi Amirzal</title>
+<meta name="description" content="Small games by Shogi Amirzal, playable in the browser.">
+<link rel="canonical" href="https://www.shogiamirzal.com/games/">
+<link rel="icon" href="/favicon.png" type="image/png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{--paper:#F7F5F0;--ink:#15181B;--ink-soft:#5B6269;--line:#DEDAD1;--card:#FFFFFF;--red:#D7263D;
+    --font-display:'Space Grotesk',ui-sans-serif,system-ui,sans-serif;--font-body:'Inter',ui-sans-serif,system-ui,sans-serif;color-scheme:light}
+  @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--paper:#15181B;--ink:#F3F1EB;--ink-soft:#A8ACB0;--line:#2B2F33;--card:#1D2125;--red:#E5414F;color-scheme:dark}}
+  :root[data-theme="dark"]{--paper:#15181B;--ink:#F3F1EB;--ink-soft:#A8ACB0;--line:#2B2F33;--card:#1D2125;--red:#E5414F;color-scheme:dark}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.55 var(--font-body)}
+  .wrap{max-width:860px;margin:0 auto;padding:28px max(16px,env(safe-area-inset-right,0px)) 48px max(16px,env(safe-area-inset-left,0px))}
+  a{color:inherit}
+  .back{font-size:14px;color:var(--ink-soft);text-decoration:none;font-weight:600}
+  h1{font:700 34px/1.1 var(--font-display);margin:14px 0 6px;letter-spacing:-.02em}
+  .sub{color:var(--ink-soft);margin:0 0 24px;max-width:52ch}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px}
+  .game{display:flex;flex-direction:column;gap:6px;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px;text-decoration:none;transition:transform .12s,border-color .12s}
+  .game:hover{transform:translateY(-2px);border-color:var(--red)}
+  .game .ic{font-size:34px;line-height:1}
+  .game b{font:700 19px/1.2 var(--font-display)}
+  .game span{color:var(--ink-soft);font-size:14.5px}
+  .game i{font-style:normal;font-size:12.5px;font-weight:600;color:var(--red);margin-top:4px}
+  .soon{opacity:.55;pointer-events:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="/">‹ Shogi Amirzal</a>
+  <h1>Games</h1>
+  <p class="sub">Small games I build for fun, mostly to play with family. They run in the browser on a phone, tablet or laptop.</p>
+  <div class="grid">
+    <a class="game" href="/games/life/">
+      <span class="ic">🎡</span>
+      <b>LIFE! Simulation</b>
+      <span>A board game of an Indonesian life, from primary school to retirement. 2–6 players on one device.</span>
+      <i>Play ›</i>
+    </a>
+  </div>
+</div>
+</body>
+</html>
