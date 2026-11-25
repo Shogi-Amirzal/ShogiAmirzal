@@ -54,7 +54,7 @@
       if (!joined.length && !gone.length && !updated.length) return;
       pending = pending || { joined: [], left: [], updated: [] };
       pending.joined = pending.joined.concat(joined); pending.left = pending.left.concat(gone); pending.updated = pending.updated.concat(updated);
-      if (!frame) frame = (window.requestAnimationFrame || setTimeout)(flush);
+      if (!frame) frame = setTimeout(flush, 16); // not requestAnimationFrame: it never fires in a background tab
     }
     function flush() {
       frame = 0; if (!pending || left) return;
