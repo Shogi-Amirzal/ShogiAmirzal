@@ -2,6 +2,7 @@
 <html lang="id">
 <head>
 <meta charset="utf-8">
+<script src="room-web.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>CONQUER! · Shogi Amirzal</title>
 <meta name="description" content="Build a civilization from ten people, then conquer the world. A strategy game you can play solo against bots or as a board game on one device.">
@@ -1021,7 +1022,7 @@ details summary{cursor:pointer;font-weight:700;margin:.3rem 0}
 .bk-card2 .slot.akbar{background:rgba(214,40,40,.18);color:#8f1414}
 
 
-#bOnline,#bBoard{display:none!important}
+#bBoard{display:none!important}
 .minfo{grid-template-columns:1fr 1fr!important}
 .mplay #bNew{grid-column:1/-1}
 </style>
@@ -4902,12 +4903,12 @@ function renderOnline(msg){
   if (msg != null) NET.err = msg;
   if (!NET.on) {
     box.innerHTML = `<div class="ocard"><h3>Main bareng dari perangkat masing-masing</h3>
-      <p class="muted">Setiap pemain membuka link artifact ini di HP atau laptopnya sendiri, masuk dengan akun Claude, lalu bergabung lewat kode room. Satu perangkat menjadi tuan rumah yang menjalankan dunia.</p>
+      <p class="muted">Setiap pemain membuka link game ini di HP atau laptopnya sendiri, lalu bergabung lewat kode room. Satu perangkat menjadi tuan rumah yang menjalankan dunia.</p>
       <label class="lab" for="oName">Nama kamu</label><input type="text" id="oName" maxlength="16" value="${esc(NET.name)}" placeholder="misalnya Benzi">
       <div class="ogrid"><div><h4>Jadi tuan rumah</h4><p class="muted">Buat room, atur aturan, lalu bagikan kodenya.</p><button class="btn primary" id="oHost">Buat room</button></div>
       <div><h4>Gabung</h4><p class="muted">Masukkan kode dari tuan rumah.</p><div class="orow"><input type="text" id="oCode" maxlength="4" placeholder="KODE" autocapitalize="characters"><button class="btn primary" id="oJoin">Gabung</button></div></div></div>
       ${NET.err ? `<p class="oerr">${esc(NET.err)}</p>` : ''}
-      <p class="muted" style="font-size:.8rem;margin-top:.8rem">Syarat: semua pemain masuk akun claude.ai dan punya akses ke artifact ini (bagikan lewat tombol Share). Butuh internet stabil. Mode satu perangkat bergantian tetap ada di "Main baru".</p></div>`;
+      <p class="muted" style="font-size:.8rem;margin-top:.8rem">Cara main: satu orang membuat room, lalu bagikan kode 4 hurufnya ke teman. Tanpa login, cukup internet yang stabil. Mode satu perangkat bergantian tetap ada di "Main baru".</p></div>`;
     const nm = () => { NET.name = ($('#oName').value || '').trim().slice(0, 16) || 'Pemain'; try { localStorage.setItem('conquer-name', NET.name); } catch (e) {} };
     $('#oHost').onclick = async () => { nm(); if (!netOk()) return renderOnline('Browser ini belum mendukung main online. Coba Chrome atau Safari terbaru.');
       const code = Array.from({ length: 4 }, () => 'ABCDEFGHJKLMNPQRSTUVWXYZ'[Math.floor(Math.random() * 24)]).join('');
@@ -4927,7 +4928,7 @@ function renderOnline(msg){
     if (hid) return `<div class="oseat"><span class="ob" style="background:#8a8172">${s.tribe ? '🙈' : '?'}</span><b>${esc(s.name)}${s.host ? ' 👑' : ''}</b><span class="muted">${s.tribe ? 'sudah memilih suku (rahasia)' : 'belum memilih suku'}</span><span class="ost ${s.ready ? 'ok' : ''}">${s.ready ? 'Siap' : 'Belum siap'}</span></div>`; return `<div class="oseat${s.cid === NET.cid ? ' me' : ''}"><span class="ob" style="background:${tb ? tb.color : '#999'}">${tb ? tb.emoji : '?'}</span><b>${esc(s.name)}${s.host ? ' 👑' : ''}${s.cid === NET.cid ? ' (kamu)' : ''}</b><span class="muted">${tb ? tb.name + (mine && iClash ? ' · dikunci, pilih ulang' : '') : s.clash ? 'suku bentrok, pilih ulang' : 'belum memilih suku'}</span><span class="ost ${s.ready ? 'ok' : ''}">${s.ready ? 'Siap' : 'Belum siap'}</span></div>`; }).join('');
   const meSeat = (NET.seats || []).find(s => s.cid === NET.cid);
   box.innerHTML = `<div class="ocard"><div class="ocode"><span class="muted">Kode room</span><b>${esc(NET.code)}</b></div>
-    <p class="muted">${NET.host ? 'Bagikan link artifact ini ke teman. Mereka memilih Main online, Gabung, lalu memasukkan kode di atas.' : L ? 'Kamu sudah masuk room. Pilih sukumu, lalu tunggu tuan rumah memulai.' : 'Menghubungi tuan rumah… Kalau permainan sudah berjalan, kamu otomatis masuk kembali begitu data dunia diterima.'}</p>
+    <p class="muted">${NET.host ? 'Bagikan link game ini dan kode di atas ke teman. Mereka memilih Main Online, Gabung, lalu memasukkan kodenya.' : L ? 'Kamu sudah masuk room. Pilih sukumu, lalu tunggu tuan rumah memulai.' : 'Menghubungi tuan rumah… Kalau permainan sudah berjalan, kamu otomatis masuk kembali begitu data dunia diterima.'}</p>
     <div class="oset">${st.mode === 'compe' ? '🎯 Competitive' : '☕ Casual'} · 🗺️ ${esc(M.name || '')} · ${st.tribeCount} suku · keputusan ${esc(st.freq || '')} · ${st.timeCap ? st.timeCap + ' menit' : 'tanpa batas waktu'} · lokasi ${st.startMode === 'acak' ? 'acak' : 'berjauhan'}${st.blind ? ' · 🙈 blind' : ''}</div>
     ${blind ? `<p class="oblind">🙈 <b>Blind match.</b> Pilihan suku pemain lain dirahasiakan sampai game selesai.${lock.length ? ` Dikunci karena bentrok: ${lock.map(k => { const t = C.TRIBES.find(x => x.key === k); return t ? t.emoji + ' ' + t.name : k; }).join(', ')}.` : ''}</p>` : ''}
     ${iClash ? `<p class="oerr">⚠️ Suku pilihanmu bentrok dengan pemain lain, jadi suku itu dikunci untuk semua. Pilih suku lain dalam <b id="oClashT">${Math.ceil((until - Date.now()) / 1000)}</b> detik, kalau tidak sukumu diacak.</p>` : ''}
@@ -9401,7 +9402,7 @@ async function roomApi(){ for (let i = 0; i < 40 && !(window.claude && window.cl
 const peersBk = () => NB.room ? NB.room.peers().filter(p => p.presence && p.presence.bk === 1 && p.presence.cid) : [];
 const pres = patch => NB.room && NB.room.presence(patch).catch(() => {});
 async function netJoin(code, host){
-  const api = await roomApi(); if (!api) { toast('Main online butuh login claude.ai dan undangan Share ke artifact ini.'); return false; }
+  const api = await roomApi(); if (!api) { toast('Main online belum tersambung. Cek koneksi internet lalu coba lagi.'); return false; }
   const room = await api.join('bk-' + code.toLowerCase());
   Object.assign(NB, { on: true, host, room, code, buf: {}, q: 0, lastHost: Date.now() });
   try { localStorage.setItem('bk-last-room', JSON.stringify({ code, at: Date.now() })); localStorage.setItem('bk-seat-' + code, NB.cid); } catch (e) {}
@@ -9433,7 +9434,7 @@ function checkVerBar(){
 }
 function openOnline(){
   let nm = ''; try { nm = localStorage.getItem('bk-name') || ''; } catch (e) {}
-  openCard(`<div class="bk-online"><h3>🌐 Main online</h3><p class="muted">Semua pemain butuh akun claude.ai dan diundang lewat tombol Share artifact ini.</p>
+  openCard(`<div class="bk-online"><h3>🌐 Main online</h3><p class="muted">Satu orang membuat room, teman bergabung dengan kode 4 huruf. Tanpa login.</p>
     <div class="bk-lab">Namamu</div><input id="bkName" maxlength="16" value="${esc(nm)}" placeholder="Nama">
     ${(() => { try { const r = JSON.parse(localStorage.getItem('bk-last-room') || 'null'); return r && Date.now() - r.at < 3 * 3600e3 ? `<div class="bk-btns"><button class="btn primary" id="bkRejoin" data-code="${r.code}">🔄 Masuk lagi ke room ${r.code}</button></div><p class="muted" style="font-size:.8rem">Kalau permainannya masih berjalan, kamu langsung kembali ke kursimu.</p>` : ''; } catch (e) { return ''; } })()}
     <div class="bk-btns"><button class="btn primary" id="bkHost">Buat room</button></div>
@@ -9453,7 +9454,7 @@ function renderLobby(){
   const taken = blind ? [] : ps.filter(p => !p.isMe && p.presence.pick != null).map(p => p.presence.pick);
   const seats = ps.map(p => { const pr = p.presence, f = pr.pick != null ? Bk.FACTIONS[pr.pick] : null, hid = blind && !p.isMe;
     return `<li>${pr.role === 'host' ? '👑' : '👤'} <b>${esc(pr.name)}</b>${p.isMe ? ' (kamu)' : ''}<span class="muted">${drawn ? '🎲 menunggu undian' : f ? (hid ? '🙈 sudah memilih' : f.emoji + ' ' + f.name) : 'belum memilih'}</span></li>`; }).join('');
-  openCard(`<div class="bk-online"><h3>🏯 Room <span class="bk-code">${NB.code}</span></h3><p class="muted">Bagikan kode ini ke teman yang sudah diundang ke artifact. Bot memainkan semua raja dan jenderal yang tidak dipakai pemain.</p>
+  openCard(`<div class="bk-online"><h3>🏯 Room <span class="bk-code">${NB.code}</span></h3><p class="muted">Bagikan kode ini ke teman. Bot memainkan semua raja dan jenderal yang tidak dipakai pemain.</p>
     <div class="bk-lab">Pemain (${ps.length})</div><ul class="bk-seats">${seats}</ul>
     <div class="bk-lab">Panjang permainan</div>${modeHtml(NB.host ? (NB.mode || 'standar') : lobbyInfo.mode, NB.host)}
     <div class="bk-lab">Penempatan pemain</div><div class="bk-place">${Object.entries(PLACES).map(([k, v]) => `<button type="button" data-place="${k}" class="${place === k ? 'on' : ''}" ${NB.host ? '' : 'disabled'}><b>${v.icon} ${v.name}</b><small>${v.desc}</small></button>`).join('')}</div>

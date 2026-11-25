@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
+<script src="../room-web.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>CONQUER! · Shogi Amirzal</title>
 <meta name="description" content="Build a civilization from ten people, then conquer the world. A strategy game you can play solo against bots or as a board game on one device.">
@@ -1021,7 +1022,7 @@ details summary{cursor:pointer;font-weight:700;margin:.3rem 0}
 .bk-card2 .slot.akbar{background:rgba(214,40,40,.18);color:#8f1414}
 
 
-#bOnline,#bBoard{display:none!important}
+#bBoard{display:none!important}
 .minfo{grid-template-columns:1fr 1fr!important}
 .mplay #bNew{grid-column:1/-1}
 </style>
@@ -4903,12 +4904,12 @@ function renderOnline(msg){
   if (msg != null) NET.err = msg;
   if (!NET.on) {
     box.innerHTML = `<div class="ocard"><h3>Play together, each on your own device</h3>
-      <p class="muted">Each player opens this artifact link on their own phone or laptop, signs in with a Claude account, then joins with the room code. One device hosts and runs the world.</p>
+      <p class="muted">Each player opens this game link on their own phone or laptop, then joins with the room code. One device hosts and runs the world.</p>
       <label class="lab" for="oName">Your name</label><input type="text" id="oName" maxlength="16" value="${esc(NET.name)}" placeholder="e.g. Benzi">
       <div class="ogrid"><div><h4>Become the host</h4><p class="muted">Create a room, set the rules, then share the code.</p><button class="btn primary" id="oHost">Create room</button></div>
       <div><h4>Join</h4><p class="muted">Enter the code from the host.</p><div class="orow"><input type="text" id="oCode" maxlength="4" placeholder="CODE" autocapitalize="characters"><button class="btn primary" id="oJoin">Join</button></div></div></div>
       ${NET.err ? `<p class="oerr">${esc(NET.err)}</p>` : ''}
-      <p class="muted" style="font-size:.8rem;margin-top:.8rem">Requirement: every player is signed in to claude.ai and has access to this artifact (share it with the Share button). Needs a stable internet connection. Taking turns on one device is still available in "New game".</p></div>`;
+      <p class="muted" style="font-size:.8rem;margin-top:.8rem">How it works: one player creates a room and shares the 4-letter code with friends. No login needed, just a stable internet connection. Taking turns on one device is still available in "New game".</p></div>`;
     const nm = () => { NET.name = ($('#oName').value || '').trim().slice(0, 16) || 'Player'; try { localStorage.setItem('conquer-name', NET.name); } catch (e) {} };
     $('#oHost').onclick = async () => { nm(); if (!netOk()) return renderOnline('This browser does not support online play yet. Try the latest Chrome or Safari.');
       const code = Array.from({ length: 4 }, () => 'ABCDEFGHJKLMNPQRSTUVWXYZ'[Math.floor(Math.random() * 24)]).join('');
@@ -4928,7 +4929,7 @@ function renderOnline(msg){
     if (hid) return `<div class="oseat"><span class="ob" style="background:#8a8172">${s.tribe ? '🙈' : '?'}</span><b>${esc(s.name)}${s.host ? ' 👑' : ''}</b><span class="muted">${s.tribe ? 'has picked a tribe (secret)' : 'has not picked a tribe yet'}</span><span class="ost ${s.ready ? 'ok' : ''}">${s.ready ? 'Ready' : 'Not ready yet'}</span></div>`; return `<div class="oseat${s.cid === NET.cid ? ' me' : ''}"><span class="ob" style="background:${tb ? tb.color : '#999'}">${tb ? tb.emoji : '?'}</span><b>${esc(s.name)}${s.host ? ' 👑' : ''}${s.cid === NET.cid ? ' (you)' : ''}</b><span class="muted">${tb ? tb.name + (mine && iClash ? ' · locked, choose again' : '') : s.clash ? 'tribes clashed, choose again' : 'has not picked a tribe yet'}</span><span class="ost ${s.ready ? 'ok' : ''}">${s.ready ? 'Ready' : 'Not ready yet'}</span></div>`; }).join('');
   const meSeat = (NET.seats || []).find(s => s.cid === NET.cid);
   box.innerHTML = `<div class="ocard"><div class="ocode"><span class="muted">Room code</span><b>${esc(NET.code)}</b></div>
-    <p class="muted">${NET.host ? 'Share this artifact link with friends. They choose Play online, Join, then enter the code above.' : L ? 'You are in the room. Pick your tribe, then wait for the host to start.' : 'Contacting the host… If the game is already running, you rejoin automatically as soon as the world data arrives.'}</p>
+    <p class="muted">${NET.host ? 'Share the game link and the code above with friends. They choose Play online, Join, then enter the code.' : L ? 'You are in the room. Pick your tribe, then wait for the host to start.' : 'Contacting the host… If the game is already running, you rejoin automatically as soon as the world data arrives.'}</p>
     <div class="oset">${st.mode === 'compe' ? '🎯 Competitive' : '☕ Casual'} · 🗺️ ${esc(M.name || '')} · ${st.tribeCount} tribes · decisions ${esc(st.freq || '')} · ${st.timeCap ? st.timeCap + ' minutes' : 'no time limit'} · location ${st.startMode === 'acak' ? 'acak' : 'berjauhan'}${st.blind ? ' · 🙈 blind' : ''}</div>
     ${blind ? `<p class="oblind">🙈 <b>Blind match.</b> Other players’ tribe choices are kept secret until the game ends.${lock.length ? ` Locked because of a clash: ${lock.map(k => { const t = C.TRIBES.find(x => x.key === k); return t ? t.emoji + ' ' + t.name : k; }).join(', ')}.` : ''}</p>` : ''}
     ${iClash ? `<p class="oerr">⚠️ Your chosen tribe clashed with another player’s, so it is locked for everyone. Choose another tribe within <b id="oClashT">${Math.ceil((until - Date.now()) / 1000)}</b> seconds, otherwise your tribe is chosen at random.</p>` : ''}
@@ -9402,7 +9403,7 @@ async function roomApi(){ for (let i = 0; i < 40 && !(window.claude && window.cl
 const peersBk = () => NB.room ? NB.room.peers().filter(p => p.presence && p.presence.bk === 1 && p.presence.cid) : [];
 const pres = patch => NB.room && NB.room.presence(patch).catch(() => {});
 async function netJoin(code, host){
-  const api = await roomApi(); if (!api) { toast('Online play needs a claude.ai login and a Share invite to this artifact.'); return false; }
+  const api = await roomApi(); if (!api) { toast('Could not connect to online play. Check your internet connection and try again.'); return false; }
   const room = await api.join('bk-' + code.toLowerCase());
   Object.assign(NB, { on: true, host, room, code, buf: {}, q: 0, lastHost: Date.now() });
   try { localStorage.setItem('bk-last-room', JSON.stringify({ code, at: Date.now() })); localStorage.setItem('bk-seat-' + code, NB.cid); } catch (e) {}
@@ -9434,7 +9435,7 @@ function checkVerBar(){
 }
 function openOnline(){
   let nm = ''; try { nm = localStorage.getItem('bk-name') || ''; } catch (e) {}
-  openCard(`<div class="bk-online"><h3>🌐 Play online</h3><p class="muted">Every player needs a claude.ai account and an invite through this artifact’s Share button.</p>
+  openCard(`<div class="bk-online"><h3>🌐 Play online</h3><p class="muted">One player creates a room, friends join with the 4-letter code. No login needed.</p>
     <div class="bk-lab">Your name</div><input id="bkName" maxlength="16" value="${esc(nm)}" placeholder="Name">
     ${(() => { try { const r = JSON.parse(localStorage.getItem('bk-last-room') || 'null'); return r && Date.now() - r.at < 3 * 3600e3 ? `<div class="bk-btns"><button class="btn primary" id="bkRejoin" data-code="${r.code}">🔄 Rejoin the room ${r.code}</button></div><p class="muted" style="font-size:.8rem">If the game is still running, you go straight back to your seat.</p>` : ''; } catch (e) { return ''; } })()}
     <div class="bk-btns"><button class="btn primary" id="bkHost">Create room</button></div>
@@ -9454,7 +9455,7 @@ function renderLobby(){
   const taken = blind ? [] : ps.filter(p => !p.isMe && p.presence.pick != null).map(p => p.presence.pick);
   const seats = ps.map(p => { const pr = p.presence, f = pr.pick != null ? Bk.FACTIONS[pr.pick] : null, hid = blind && !p.isMe;
     return `<li>${pr.role === 'host' ? '👑' : '👤'} <b>${esc(pr.name)}</b>${p.isMe ? ' (you)' : ''}<span class="muted">${drawn ? '🎲 waiting for the draw' : f ? (hid ? '🙈 has chosen' : f.emoji + ' ' + f.name) : 'has not chosen yet'}</span></li>`; }).join('');
-  openCard(`<div class="bk-online"><h3>🏯 Room <span class="bk-code">${NB.code}</span></h3><p class="muted">Share this code with friends who have been invited to the artifact. Bots play every king and general not taken by a player.</p>
+  openCard(`<div class="bk-online"><h3>🏯 Room <span class="bk-code">${NB.code}</span></h3><p class="muted">Share this code with friends. Bots play every king and general not taken by a player.</p>
     <div class="bk-lab">Player (${ps.length})</div><ul class="bk-seats">${seats}</ul>
     <div class="bk-lab">Game length</div>${modeHtml(NB.host ? (NB.mode || 'standar') : lobbyInfo.mode, NB.host)}
     <div class="bk-lab">Player placement</div><div class="bk-place">${Object.entries(PLACES).map(([k, v]) => `<button type="button" data-place="${k}" class="${place === k ? 'on' : ''}" ${NB.host ? '' : 'disabled'}><b>${v.icon} ${v.name}</b><small>${v.desc}</small></button>`).join('')}</div>
