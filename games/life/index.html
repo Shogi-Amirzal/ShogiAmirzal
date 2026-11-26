@@ -44,6 +44,9 @@ html{scroll-padding-top:env(safe-area-inset-top,0px)}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased}
 button{font:inherit;color:inherit;cursor:pointer}
 button:focus-visible,input:focus-visible{outline:3px solid var(--merah);outline-offset:2px}
+.kbhint{font-style:normal}@media (hover:none),(pointer:coarse){.kbhint,.kbtip{display:none!important}}
+.kbtip{grid-column:1/-1;font-size:12.5px;color:var(--muted);text-align:center}
+#game.full .kbtip{justify-self:center;color:#fff;background:rgba(0,0,0,.45);border-radius:999px;padding:4px 12px;font-size:13.5px}
 h1,h2,h3{font-family:var(--display);margin:0;line-height:1.1}
 .screen{display:none}
 .screen.on{display:block}
@@ -1078,7 +1081,7 @@ body.ingame #game.on{position:fixed;inset:0;height:auto!important;padding-top:ma
       <div class="chips collapsed" id="chips"></div>
       <div id="fabWrap"><button class="btn" id="btnScore" aria-expanded="false">🏆 Skor</button><button class="btn" id="btnDebt2" hidden></button><button id="fab" aria-label="Putar roda" hidden><span class="ic">🎡</span>Putar</button></div>
       <div id="choicePanel" class="cpanel" role="region" aria-live="polite"></div>
-      <div id="wheelOverlay" aria-hidden="true"><div class="wheelcard"><svg id="wheel" viewBox="0 0 200 200"><g id="wheelRot"></g><g class="pointer"></g></svg><div id="wheelResult"></div></div><div id="wheelHint"><span>👆 Geser rodanya untuk memutar</span><button class="btn primary big" id="btnSpinNow">Putar!</button></div></div>
+      <div id="wheelOverlay" aria-hidden="true"><div class="wheelcard"><svg id="wheel" viewBox="0 0 200 200"><g id="wheelRot"></g><g class="pointer"></g></svg><div id="wheelResult"></div></div><div id="wheelHint"><span>👆 Geser rodanya untuk memutar<i class="kbhint"> · atau tekan Enter / Spasi</i></span><button class="btn primary big" id="btnSpinNow">Putar!</button></div></div>
     </div>
     <aside id="sidePanel" aria-label="Panel kontrol"></aside>
     <aside id="info">
@@ -2745,7 +2748,7 @@ const G3=(()=>{
 function use3D(){return view3d&&G3.supported()}
 G3.onManual=()=>{camManual=true;clearTimeout(camT)};
 G3.onTileTap=i=>showTileInfo(i);
-function camOverview(d){if(use3D())return G3.overview(d);return camOverview(d)}
+function camOverview(d){if(use3D())return G3.overview(d);if(!geom)return Promise.resolve();return camTo(overviewBox(),d)}
 function updateViewBtn(){const b=$('#btnView');if(!b)return;b.hidden=!G3.supported();b.textContent=use3D()?'🗺️ 2.5D':'🧊 3D'}
 $('#btnView').onclick=()=>{view3d=!use3D();lsSet('ph.view3d',view3d?'1':'0');updateViewBtn();geomKey='';renderBoard(true);renderAll()};
 
@@ -2933,7 +2936,7 @@ function renderAction(){
   const single=pd&&SINGLE[pd.kind];const [fic,flb]=(single||'🎡|Putar').split('|');
   const gateOn=evGate&&$('#evModal').classList.contains('on');
   const canSpin=!animating&&!pd&&mine&&!gateOn;const showFab=!animating&&!gateOn&&mine&&(!pd||!!single);
-  fab.hidden=!showFab;if(showFab)fab.innerHTML=gateOn?`<span class="ic">👍</span>Oke`:`<span class="ic">${fic}</span>${flb}${pd&&pd.kind==='cont'&&S.carry?` ${S.carry} langkah`:''}`;
+  fab.hidden=!showFab;fab.title='Enter / Spasi';if(showFab)fab.innerHTML=gateOn?`<span class="ic">👍</span>Oke`:`<span class="ic">${fic}</span>${flb}${pd&&pd.kind==='cont'&&S.carry?` ${S.carry} langkah`:''}`;
   if(gateOn){cp.classList.remove('on');debt.hidden=true;return}
   debt.hidden=!(canSpin&&p.debt>0&&p.money>0);if(!debt.hidden)debt.textContent=`Lunasi utang (${fmt(Math.min(p.money,p.debt))})`;
   if(pd&&!animating&&single&&mine){
@@ -2946,6 +2949,7 @@ function renderAction(){
     else if(mine&&(pd.kind==='path'||pd.kind==='f_path'))h+=`<div class="dirs">${pd.opts.map((o,i)=>`<button class="dir ${i?'right':'left'}" data-opt="${i}"><span class="arr">${i?'→':'←'}</span><b>${esc(mtxt(o.l))}</b><small>${esc(mtxt(o.s))}</small></button>`).join('')}</div>`;
     else if(mine){const n=pd.opts.length,cols=n<=4?n:(n<=6?3:4);cp.style.setProperty('--cols',cols);cp.style.setProperty('--cw',Math.min(980,cols*260)+'px');h+=pd.opts.map((o,i)=>{const L=mtxt(o.l),m=L.match(/^((?:\p{Extended_Pictographic}|\p{Regional_Indicator})(?:[\uFE0F\u200D\u20E3]|\p{Extended_Pictographic}|\p{Emoji_Modifier})*)\s*(.*)$/u);return `<button class="opt" data-opt="${i}" ${o.dis?'disabled':''}>${m?`<span class="oic">${m[1]}</span><b>${esc(m[2])}</b>`:`<b>${esc(L)}</b>`}<small>${o.dis?'Tabungan belum cukup':esc(mtxt(o.s))}</small></button>`}).join('')}
     else h+=`<div class="wait">${isBot?`🤖 ${esc(p.name)} sedang berpikir…`:`Menunggu ${esc(p.name)} memilih…`}</div>`;
+    const nk=cp.querySelectorAll?pd.opts.length:0;if(mine&&pd.kind!=='mini'&&nk>1)h+=`<div class="kbtip">⌨️ ← → pilih kartu · Enter / Spasi untuk memilih · atau tekan 1–${Math.min(9,nk)}</div>`;
     cp.innerHTML=h+`</div>`;cp.classList.add('on');
     speakOnce('pd'+S.gid+S.rev,`${p.name}. ${mtxt(pd.t)}. ${mtxt(pd.d)}`);
     cp.querySelectorAll('[data-opt]').forEach(el=>el.onclick=()=>act(s=>actChoice(s,+el.dataset.opt)));
@@ -3050,7 +3054,40 @@ let evGate=false,splashLater=null;
 function closeEvent(){const was=$('#evModal').classList.contains('on');if(was)uiClosedAt=Date.now();$('#evModal').classList.remove('on');const g=evGate;evGate=false;
   if(g){if(splashLater&&S&&S.phase==='play'){const ns=splashLater;splashLater=null;turnSplash(ns)}renderAll()}}
 $('#evModal').addEventListener('click',e=>{if(e.target.id==='evModal')closeEvent()});
-document.addEventListener('keydown',e=>{if(e.key==='Escape')closeEvent()});
+/* keyboard play (laptop without mouse):
+   Enter / Space = spin, Oke, or pick the highlighted card · ← → ↑ ↓ = move between cards · 1–9 = pick a card · Esc = close */
+document.addEventListener('keydown',e=>{
+  if(e.ctrlKey||e.metaKey||e.altKey)return;
+  const t=e.target,tag=(t&&t.tagName)||'';
+  if(/^(INPUT|TEXTAREA|SELECT)$/.test(tag)||(t&&t.isContentEditable))return;
+  const k=e.key,ok=k==='Enter'||k===' '||k==='Spacebar';
+  const on=id=>{const el=$('#'+id);return !!el&&el.classList.contains('on')};
+  if(k==='Escape'){if(spinGo){cancelSpinReady();return}if(on('evModal')){closeEvent();return}
+    if(on('setModal')){$('#setModal').classList.remove('on');return}if(on('profModal')){$('#profModal').classList.remove('on');return}
+    if($('#info')&&$('#info').classList.contains('open')){$('#info').classList.remove('open');return}return}
+  if(!$('#game')||!$('#game').classList.contains('on'))return;
+  if(miniOpen){ // a mini game: Enter/Space presses its main button when nothing is focused
+    if(ok&&(!t||t===document.body)){const b=[...$('#miniCard').querySelectorAll('button')].find(x=>!x.disabled&&x.offsetParent);if(b){e.preventDefault();b.click()}}return}
+  if(ok&&spinGo){e.preventDefault();fireSpin(1.2);return}
+  if(ok&&on('evModal')){e.preventDefault();closeEvent();return}
+  const md=document.querySelector('.modal.on');
+  if(md){ // another dialog (guide, story, profile): Enter/Space presses its main button when nothing in it is focused
+    if(ok&&!(t&&md.contains(t)&&/^(BUTTON|A)$/.test(tag))){const bs=[...md.querySelectorAll('button')].filter(x=>!x.disabled&&x.offsetParent);const b=bs.find(x=>x.classList.contains('primary'))||bs[bs.length-1];if(b){e.preventDefault();b.click()}}
+    return}
+  const cp=$('#choicePanel');const opts=cp&&cp.classList.contains('on')?[...cp.querySelectorAll('[data-opt],[data-mini]')].filter(b=>!b.disabled):[];
+  const inCards=opts.includes(document.activeElement);
+  if(opts.length&&/^Arrow(Left|Right|Up|Down)$/.test(k)){e.preventDefault();
+    let i=opts.indexOf(document.activeElement);const step=(k==='ArrowLeft'||k==='ArrowUp')?-1:1;
+    if(i<0)i=step>0?0:opts.length-1;else i=(i+step+opts.length)%opts.length;
+    opts[i].focus({preventScroll:true});opts[i].scrollIntoView({block:'nearest',inline:'nearest'});return}
+  if(opts.length&&/^[1-9]$/.test(k)){const b=opts[+k-1];if(b){e.preventDefault();b.click()}return}
+  if(ok){
+    if(inCards)return; // the focused card's own Enter/Space click picks it
+    if(t&&t!==document.body&&/^(BUTTON|A)$/.test(tag))return; // any other focused button keeps its normal key
+    const fab=$('#fab');if(fab&&!fab.hidden){e.preventDefault();fabAction();return}
+    if(opts.length){e.preventDefault();opts[0].focus({preventScroll:true})}
+  }
+});
 
 /* =========================================================
    GUIDE (rules and icon meanings)
